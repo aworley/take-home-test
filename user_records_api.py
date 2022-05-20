@@ -41,7 +41,15 @@ def users_put():
 
 @app.route('/groups', methods=['GET'])
 def groups_get():
-    return jsonify({'message': 'Placeholder 5'})
+    db = TinyDB('user-records-db.json')
+    groups_table = db.table('groups')
+    Groups_query = Query()
+    search_results = groups_table.search(Groups_query.group_name == request.args.get('group_name'))
+
+    if search_results:
+        return jsonify(search_results)
+    else:
+        abort(404)
 
 @app.route('/groups', methods=['POST'])
 def groups_post():
