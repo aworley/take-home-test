@@ -4,8 +4,9 @@
 # Aaron Worley
 # 2022-05-19
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 import json
+from tinydb import TinyDB, Query
 
 app = Flask(__name__)
 app.debug = True
@@ -16,7 +17,15 @@ def index():
 
 @app.route('/users', methods=['GET'])
 def users_get():
-    return jsonify({'message': 'Placeholder 1'})
+    db = TinyDB('user-records-db.json')
+    users_table = db.table('users')
+    Users_query = Query()
+    search_results = users_table.search(Users_query.user_id == request.args.get('user_id'))
+
+    if search_results:
+        return jsonify(search_results)
+    else:
+        abort(404)
 
 @app.route('/users', methods=['POST'])
 def users_post():
