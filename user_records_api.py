@@ -34,7 +34,7 @@ def users_post():
 
     # Bail out if the provided userid already exists in the table.
     if db.search(db_query.userid == new_user['userid']):
-        abort(409) 
+        abort(400) 
     # Add new user record to the users table.
     # TODO: catch exceptions
     if db.insert(new_user):
@@ -65,7 +65,7 @@ def users_put(url_userid):
     # Bail out if a userid change is attempted but the requested 
     # new userid already exists in the table.
     if url_userid != updated_user['userid'] and db.search(db_query.userid == updated_user['userid']):
-        abort(409) 
+        abort(400) 
     
     # Save updated user record to the users table.
     # TODO: catch exceptions
@@ -95,7 +95,7 @@ def groups_post():
 
     # Bail out if the provided userid already exists in the table.
     if db.search(db_query.name == new_group['name']):
-        abort(409) 
+        abort(400) 
     # Add new user record to the users table.
     # TODO: catch exceptions
     if db.insert(new_group):
@@ -116,7 +116,7 @@ def groups_put(url_name):
     db1_query = Query()
     for userid_value in group_list:
         if not db1.search(db1_query.userid == userid_value):
-            abort(409)
+            abort(400)
     # Retrieve all user records. Add and remove group memberships
     # as needed.
     for user in db1:
