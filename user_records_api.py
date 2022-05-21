@@ -56,11 +56,11 @@ def users_delete(url_userid):
 def users_put():
     return jsonify({'message': 'Placeholder 4'})
 
-@app.route('/groups/<url_group_name>', methods=['GET'])
-def groups_get(url_group_name):
+@app.route('/groups/<url_name>', methods=['GET'])
+def groups_get(url_name):
     db = TinyDB('groups-table.json')
     db_query = Query()
-    search_results = db.search(db_query.group_name == url_group_name)
+    search_results = db.search(db_query.name == url_name)
 
     if search_results:
         return jsonify(search_results)
@@ -74,7 +74,7 @@ def groups_post():
     db_query = Query()
 
     # Bail out if the provided userid already exists in the table.
-    if db.search(db_query.group_name == new_group['group_name']):
+    if db.search(db_query.name == new_group['name']):
         abort(409) 
     # Add new user record to the users table.
     # TODO: catch exceptions
@@ -87,12 +87,12 @@ def groups_post():
 def groups_put():
     return jsonify({'message': 'Placeholder 7'})
 
-@app.route('/groups/<url_group_name>', methods=['DELETE'])
-def groups_delete(url_group_name):
+@app.route('/groups/<url_name>', methods=['DELETE'])
+def groups_delete(url_name):
     db = TinyDB('groups-table.json')
     db_query = Query()
     
-    if db.remove(db_query.group_name == url_group_name):
+    if db.remove(db_query.name == url_name):
         return jsonify({'message': 'Group deleted'})
     else:
         abort(404)
@@ -106,10 +106,10 @@ def reset_test_data():
     db0.insert({"first_name": "Jane", "last_name": "Smith", "userid": "jsmith", "groups": ["admins"]})
     db1 = TinyDB('groups-table.json')
     db1.truncate()
-    db1.insert({"group_name": "admins"})
-    db1.insert({"group_name": "staff"})
-    db1.insert({"group_name": "devops"})
-    db1.insert({"group_name": "mgmt"})
+    db1.insert({"name": "admins"})
+    db1.insert({"name": "staff"})
+    db1.insert({"name": "devops"})
+    db1.insert({"name": "mgmt"})
     return jsonify({'message': 'All data purged and test data added'})
 
 # Add a welcome message to the HTTP headers.
