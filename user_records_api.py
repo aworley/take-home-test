@@ -28,13 +28,25 @@ def users_get(url_user_id):
 
 @app.route('/users', methods=['POST'])
 def users_post():
-    return jsonify({'message': 'Placeholder 2'})
+    new_user = json.loads(request.data)
+    db = TinyDB('users-table.json')
+    db_query = Query()
+
+    # Bail out if the provided userid already exists in the table.
+    if db.search(db_query.user_id == new_user['userid']):
+        abort(409) 
+    # Add new user record to the users table.
+    # TODO: catch exceptions
+    if db.insert(new_user):
+        return jsonify({'message': 'User added'})
+    else:
+        abort(404)
 
 @app.route('/users/<url_user_id>', methods=['DELETE'])
 def users_delete(url_user_id):
     db = TinyDB('users-table.json')
     db_query = Query()
-    
+
     if db.remove(db_query.user_id == url_user_id):
         return jsonify({'message': 'User deleted'})
     else:
@@ -57,7 +69,19 @@ def groups_get(url_group_name):
 
 @app.route('/groups', methods=['POST'])
 def groups_post():
-    return jsonify({'message': 'Placeholder 6'})
+    new_group = json.loads(request.data)
+    db = TinyDB('groups-table.json')
+    db_query = Query()
+
+    # Bail out if the provided userid already exists in the table.
+    if db.search(db_query.group_name == new_group['group_name']):
+        abort(409) 
+    # Add new user record to the users table.
+    # TODO: catch exceptions
+    if db.insert(new_group):
+        return jsonify({'message': 'Group added'})
+    else:
+        abort(404)
 
 @app.route('/groups', methods=['PUT'])
 def groups_put():
