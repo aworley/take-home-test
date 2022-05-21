@@ -97,6 +97,21 @@ def groups_delete(url_group_name):
     else:
         abort(404)
 
+@app.route('/reset_test_data', methods=['GET'])
+def reset_test_data():
+    # Warning: this section empties both database tables and replaces existing
+    # data with sample data.
+    db0 = TinyDB('users-table.json')
+    db0.truncate()
+    db0.insert({"first_name": "Jane", "last_name": "Smith", "user_id": "jsmith", "groups": ["admins"]})
+    db1 = TinyDB('groups-table.json')
+    db1.truncate()
+    db1.insert({"group_name": "admins"})
+    db1.insert({"group_name": "staff"})
+    db1.insert({"group_name": "devops"})
+    db1.insert({"group_name": "mgmt"})
+    return jsonify({'message': 'All data purged and test data added'})
+
 # Add a welcome message to the HTTP headers.
 # Doesn't serve a purpose other than cosmetics.
 @app.after_request
