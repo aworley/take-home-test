@@ -30,9 +30,15 @@ def users_get(url_user_id):
 def users_post():
     return jsonify({'message': 'Placeholder 2'})
 
-@app.route('/users', methods=['DELETE'])
-def users_delete():
-    return jsonify({'message': 'Placeholder 3'})
+@app.route('/users/<url_user_id>', methods=['DELETE'])
+def users_delete(url_user_id):
+    db = TinyDB('users-table.json')
+    db_query = Query()
+    
+    if db.remove(db_query.user_id == url_user_id):
+        return jsonify({'message': 'User deleted'})
+    else:
+        abort(404)
 
 @app.route('/users', methods=['PUT'])
 def users_put():
@@ -57,9 +63,15 @@ def groups_post():
 def groups_put():
     return jsonify({'message': 'Placeholder 7'})
 
-@app.route('/groups', methods=['DELETE'])
-def groups_delete():
-    return jsonify({'message': 'Placeholder 8'})
+@app.route('/groups/<url_group_name>', methods=['DELETE'])
+def groups_delete(url_group_name):
+    db = TinyDB('groups-table.json')
+    db_query = Query()
+    
+    if db.remove(db_query.group_name == url_group_name):
+        return jsonify({'message': 'Group deleted'})
+    else:
+        abort(404)
 
 # Add a welcome message to the HTTP headers.
 # Doesn't serve a purpose other than cosmetics.
