@@ -151,13 +151,14 @@ def reset_test_data():
     # data with sample data.
     db0 = TinyDB('users-table.json')
     db0.truncate()
-    db0.insert({"first_name": "Jane", "last_name": "Smith", "userid": "jsmith", "groups": ["admins"]})
+    db0.insert({"first_name": "Joe", "last_name": "Smith", "userid": "jsmith", "groups": ["admins", "users"]})
+    db0.insert({"first_name": "Jane", "last_name": "Saito", "userid": "", "groups": [""]})
+    db0.insert({"first_name": "Juan", "last_name": "Santiago", "userid": "", "groups": [""]})
+    db0.insert({"first_name": "Janet", "last_name": "Simmons", "userid": "", "groups": [""]})
     db1 = TinyDB('groups-table.json')
     db1.truncate()
     db1.insert({"name": "admins"})
-    db1.insert({"name": "staff"})
-    db1.insert({"name": "devops"})
-    db1.insert({"name": "mgmt"})
+    db1.insert({"name": "users"})
     return jsonify({'message': 'All data purged and test data added'})
 
 # Add a welcome message to the HTTP headers.
