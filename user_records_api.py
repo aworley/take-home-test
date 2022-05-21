@@ -129,13 +129,21 @@ def groups_put(url_name):
 
 @app.route('/groups/<url_name>', methods=['DELETE'])
 def groups_delete(url_name):
-    db = TinyDB('groups-table.json')
-    db_query = Query()
-    
-    if db.remove(db_query.name == url_name):
-        return jsonify({'message': 'Group deleted'})
-    else:
+    db0 = TinyDB('groups-table.json')
+    db0_query = Query()
+    # Bail out if an invalid group was requested
+    if not db0.search(db0_query.name == url_name):
         abort(404)
+    db1 = TinyDB('users-table.json')
+    db1_query = Query()
+    userids_list = []
+    for user in db1:
+        if url_name in user['groups']:
+            user['groups'].remove(url_name)
+            db1.update(user, db1_query.userid == user['userid'])
+    # TODO: catch exceptions    
+    db0.remove(db0_query.name == url_name)
+    return jsonify({'message': 'Group deleted'})
 
 @app.route('/reset_test_data', methods=['GET'])
 def reset_test_data():
