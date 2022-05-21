@@ -15,11 +15,11 @@ app.debug = True
 def index():
     return "<html><body><p>Welcome to the User Records API</p></body></html>"
 
-@app.route('/users', methods=['GET'])
-def users_get():
+@app.route('/users/<url_user_id>', methods=['GET'])
+def users_get(url_user_id):
     db = TinyDB('users-table.json')
     db_query = Query()
-    search_results = db.search(db_query.user_id == request.args.get('user_id'))
+    search_results = db.search(db_query.user_id == url_user_id)
 
     if search_results:
         return jsonify(search_results)
@@ -38,11 +38,11 @@ def users_delete():
 def users_put():
     return jsonify({'message': 'Placeholder 4'})
 
-@app.route('/groups', methods=['GET'])
-def groups_get():
+@app.route('/groups/<url_group_name>', methods=['GET'])
+def groups_get(url_group_name):
     db = TinyDB('groups-table.json')
     db_query = Query()
-    search_results = db.search(db_query.group_name == request.args.get('group_name'))
+    search_results = db.search(db_query.group_name == url_group_name)
 
     if search_results:
         return jsonify(search_results)
