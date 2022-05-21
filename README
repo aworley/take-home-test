@@ -2,3 +2,34 @@ Take Home Test project for Planet
 Aaron Worley
 2022-05-19
 
+### Introduction ###
+Welcome to my take home code test project! This project 
+implements a REST service, as described in the project
+specification document. It requires Python 3.5+ or PyPy3.
+It uses the TinyDB Python package for data storage. Sample 
+test database files are included with my code.
+
+### Installation Instructions ###
+* unzip the take-home-test.zip file
+* In a terminal window, cd to the take-home-test directory.
+* run pip install -r requirements.txt
+* run python user_records_api.py
+The REST service will now be running and accepting connections
+at http://localhost:5000.
+
+### Integration test instructions ###
+I have put together a small integration test suite that runs in
+the Postman REST client. To use it, please follow these 
+instructions.
+
+* Install Postman, if needed. (https://www.postman.com/)
+* Run Postman.
+* Select File -> Import on the menu.
+* Select the File tab, then the Upload Files button. Navigate to 
+the test folder and select the .json file there. Click the 
+Import button.
+* Click the three dots next to User Records integration test on 
+the sidebar. 
+* Select Run collection from the menu.
+* Press the Run User Records integration test button.
+* Postman will run the integration test.
