@@ -17,10 +17,9 @@ def index():
 
 @app.route('/users', methods=['GET'])
 def users_get():
-    db = TinyDB('user-records-db.json')
-    users_table = db.table('users')
-    Users_query = Query()
-    search_results = users_table.search(Users_query.user_id == request.args.get('user_id'))
+    db = TinyDB('users-table.json')
+    db_query = Query()
+    search_results = db.search(db_query.user_id == request.args.get('user_id'))
 
     if search_results:
         return jsonify(search_results)
@@ -41,10 +40,9 @@ def users_put():
 
 @app.route('/groups', methods=['GET'])
 def groups_get():
-    db = TinyDB('user-records-db.json')
-    groups_table = db.table('groups')
-    Groups_query = Query()
-    search_results = groups_table.search(Groups_query.group_name == request.args.get('group_name'))
+    db = TinyDB('groups-table.json')
+    db_query = Query()
+    search_results = db.search(db_query.group_name == request.args.get('group_name'))
 
     if search_results:
         return jsonify(search_results)
