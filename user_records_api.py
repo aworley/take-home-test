@@ -52,9 +52,25 @@ def users_delete(url_userid):
     else:
         abort(404)
 
-@app.route('/users', methods=['PUT'])
-def users_put():
-    return jsonify({'message': 'Placeholder 4'})
+@app.route('/users/<url_userid>', methods=['PUT'])
+def users_put(url_userid):
+    updated_user = json.loads(request.data)
+    db = TinyDB('users-table.json')
+    db_query = Query()
+
+    # Bail out if the userid in the url does not exist in the table.
+    if not db.search(db_query.userid == url_userid):
+        abort(404)
+
+    # Bail out if a userid change is attempted but the requested 
+    # new userid already exists in the table.
+    if url_userid != updated_user['userid'] and db.search(db_query.userid == updated_user['userid']):
+        abort(409) 
+    
+    # Save updated user record to the users table.
+    # TODO: catch exceptions
+    db.update(updated_user, db_query.userid == url_userid)
+    return jsonify({'message': 'User updated'})
 
 @app.route('/groups/<url_name>', methods=['GET'])
 def groups_get(url_name):
@@ -83,9 +99,29 @@ def groups_post():
     else:
         abort(404)
 
-@app.route('/groups', methods=['PUT'])
-def groups_put():
-    return jsonify({'message': 'Placeholder 7'})
+@app.route('/groups/<url_name>', methods=['PUT'])
+def groups_put(url_name):
+    group_list = json.loads(request.data)
+    db0 = TinyDB('groups-table.json')
+    db0_query = Query()
+    # Bail out if the group name in the url does not exist in the table.
+    if not db0.search(db0_query.name == url_name):
+        abort(404)
+    # Bail out if there is an invalid userid in the provided list.
+    db1 = TinyDB('users-table.json')
+    db1_query = Query()
+    for userid_value in group_list:
+        if not db1.search(db1_query.userid == userid_value):
+            abort(409)
+    # Retrieve all user records. Add and remove group memberships
+    # as needed.
+    for user in db1:
+        if user['userid'] in group_list and url_name not in user['groups']:
+            user['groups'].append(url_name)
+        if url_name in user['groups'] and user['userid'] not in group_list:
+            user['groups'].remove(url_name)
+        db1.update(user, db1_query.userid == user['userid'])
+    return jsonify({'message': 'Group updated'})
 
 @app.route('/groups/<url_name>', methods=['DELETE'])
 def groups_delete(url_name):
