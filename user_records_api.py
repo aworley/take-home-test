@@ -15,11 +15,11 @@ app.debug = True
 def index():
     return "<html><body><p>Welcome to the User Records API</p></body></html>"
 
-@app.route('/users/<url_user_id>', methods=['GET'])
-def users_get(url_user_id):
+@app.route('/users/<url_userid>', methods=['GET'])
+def users_get(url_userid):
     db = TinyDB('users-table.json')
     db_query = Query()
-    search_results = db.search(db_query.user_id == url_user_id)
+    search_results = db.search(db_query.userid == url_userid)
 
     if search_results:
         return jsonify(search_results)
@@ -33,7 +33,7 @@ def users_post():
     db_query = Query()
 
     # Bail out if the provided userid already exists in the table.
-    if db.search(db_query.user_id == new_user['userid']):
+    if db.search(db_query.userid == new_user['userid']):
         abort(409) 
     # Add new user record to the users table.
     # TODO: catch exceptions
@@ -42,12 +42,12 @@ def users_post():
     else:
         abort(404)
 
-@app.route('/users/<url_user_id>', methods=['DELETE'])
-def users_delete(url_user_id):
+@app.route('/users/<url_userid>', methods=['DELETE'])
+def users_delete(url_userid):
     db = TinyDB('users-table.json')
     db_query = Query()
 
-    if db.remove(db_query.user_id == url_user_id):
+    if db.remove(db_query.userid == url_userid):
         return jsonify({'message': 'User deleted'})
     else:
         abort(404)
@@ -103,7 +103,7 @@ def reset_test_data():
     # data with sample data.
     db0 = TinyDB('users-table.json')
     db0.truncate()
-    db0.insert({"first_name": "Jane", "last_name": "Smith", "user_id": "jsmith", "groups": ["admins"]})
+    db0.insert({"first_name": "Jane", "last_name": "Smith", "userid": "jsmith", "groups": ["admins"]})
     db1 = TinyDB('groups-table.json')
     db1.truncate()
     db1.insert({"group_name": "admins"})
