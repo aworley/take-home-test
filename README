@@ -26,10 +26,11 @@ instructions.
 * Run Postman.
 * Select File -> Import on the menu.
 * Select the File tab, then the Upload Files button. Navigate to 
-the test folder and select the .json file there. Click the 
+the tests folder and select the .json file there. Click the 
 Import button.
-* Click the three dots next to User Records integration test on 
-the sidebar. 
+* Hover the mouse pointer over the User Records integration test
+entry on the sidebar. Click the button with three dots that 
+appears.
 * Select Run collection from the menu.
 * Press the Run User Records integration test button.
 * Postman will run the integration test.
